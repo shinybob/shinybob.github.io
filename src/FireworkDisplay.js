@@ -1,6 +1,7 @@
 FireworkDisplay.constructor = FireworkDisplay;
 FireworkDisplay.prototype = Object.create(PIXI.Container.prototype);
 
+var RippleEffect = require('./effects/RippleEffect');
 var TextureGenerator = require('./particle-system/utils/TextureGenerator');
 var Firework1 = require('./effects/Firework1');
 var Firework2 = require('./effects/Firework2');
@@ -13,6 +14,8 @@ var ElementalDragon = require('./effects/ElementalDragon');
 function FireworkDisplay() {
     PIXI.Container.call(this);
 
+    this.setupBackground();
+
     this.effects = [];
     this.addEffect(new Firework1());
     this.addEffect(new Firework2());
@@ -23,6 +26,17 @@ function FireworkDisplay() {
     this.addEffect(new ElementalDragon());
 
     this.addButtons();
+}
+
+FireworkDisplay.prototype.setupBackground = function() {
+    var background = new PIXI.Sprite.fromImage('../resources/background.png');
+    background.anchor= {x:0.5, y:1};
+    background.x = window.innerWidth / 2;
+    background.y = window.innerHeight - 100;
+    this.addChild(background);
+
+    this.rippleEffect = new RippleEffect({x: window.innerWidth / 2, y:window.innerHeight - 150});
+    this.addChild(this.rippleEffect);
 }
 
 FireworkDisplay.prototype.addEffect = function(effect) {
@@ -45,6 +59,8 @@ FireworkDisplay.prototype.startEffect = function(effect) {
 };
 
 FireworkDisplay.prototype.update = function() {
+    this.rippleEffect.update();
+
     for(var i = 0; i < this.effects.length; i++) {
         this.effects[i].update();
     }

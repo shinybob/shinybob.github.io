@@ -1,10 +1,9 @@
 var FireworkDisplay = require('../src/FireworkDisplay');
-var RippleEffect = require('./ripple/RippleEffect');
+
 window.onload = init;
 
 function init() {
     this.originalWindowSize = {width:window.innerWidth, height:window.innerHeight};
-
 
     this.loader = PIXI.loader
         .add('ripple', '../resources/ripple.png')
@@ -17,7 +16,6 @@ function init() {
 
 function texturesLoaded (loader, resources) {
     setupStage();
-    setupBackground();
     setupFireworkDisplay();
     update();
 }
@@ -38,17 +36,6 @@ function setupStage() {
     this.stage = new PIXI.Container();
 }
 
-function setupBackground() {
-    var background = new PIXI.Sprite.fromImage('../resources/background.png');
-    background.anchor= {x:0.5, y:1};
-    background.x = window.innerWidth / 2;
-    background.y = window.innerHeight - 100;
-    this.stage.addChild(background);
-
-    this.rippleEffect = new RippleEffect({x: window.innerWidth / 2, y:window.innerHeight - 150});
-    this.stage.addChild(this.rippleEffect);
-}
-
 function setupFireworkDisplay() {
     this.fireworkDisplay = new FireworkDisplay();
     this.stage.addChild(this.fireworkDisplay);
@@ -58,7 +45,6 @@ function update() {
     TWEEN.update();
 
     this.fireworkDisplay.update();
-    this.rippleEffect.update();
     this.renderer.render(this.stage);
 
     if(this.originalWindowSize.width !== window.innerWidth || this.originalWindowSize.height !== window.innerHeight) {

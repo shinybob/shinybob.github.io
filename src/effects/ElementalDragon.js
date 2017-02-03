@@ -17,13 +17,16 @@ function ElementalDragon() {
     this.setupBodyParticles();
     this.setupBodySmoke();
     this.setupHeadAndTail();
+
+    this.dragonRotationX = 0;
+    this.dragonRotationY = 0;
+    this.mouseTrail = false;
 }
 
 ElementalDragon.prototype.setupHeadAndTail = function() {
     this.head = new PIXI.Sprite.fromImage('../resources/dragonHead.png');
     this.head.anchor.y = .5;
     this.head.anchor.x = .5;
-    // this.tail = new PIXI.Sprite.fromImage('../resources/dragonTail.png');
 };
 
 ElementalDragon.prototype.setupBodyParticles = function() {
@@ -75,21 +78,40 @@ ElementalDragon.prototype.setupBodySmoke = function() {
 };
 
 ElementalDragon.prototype.start = function() {
-    this.bodyParticlesEmitter.start();
-    this.bodySmokeEmitter.start();
-    this.addChild(this.head);
-    // this.addChild(this.tail);
-    this.pos = {x:0, y:0};
-    this.pos2 = {x:0, y:0};
-    this.headTween = new TWEEN.Tween(this.pos);
-    // this.tailTween = new TWEEN.Tween(this.pos2)
+    if(this.started !== true) {
+        this.started = true;
+        this.pos = {x:window.innerWidth / 2, y:window.innerHeight / 2};
+        this.bodyParticlesEmitter.start();
+        this.bodySmokeEmitter.start();
+        this.addChild(this.head);
+        this.headTween = new TWEEN.Tween(this.pos);
+    } else {
+        this.mouseTrail = true;
+    }
+};
 
+ElementalDragon.prototype.startMouseTrail = function() {
+    this.mouseTrail = true;
+};
+
+ElementalDragon.prototype.getPosition = function() {
+    var target = {};
+
+    if(this.mouseTrail) {
+        target = renderer.plugins.interaction.mouse.global;
+    } else {
+        this.dragonRotationX += .04;
+        this.dragonRotationY += .02;
+        target.x = (window.innerWidth / 2) + Math.sin(this.dragonRotationX) * 200;
+        target.y = (window.innerHeight / 2) + Math.cos(this.dragonRotationY) * 200;
+        target.rotation = Geometry.angleBetweenPointsRadians(target, {x:this.head.x, y:this.head.y});
+    }
+
+    return target;
 };
 
 ElementalDragon.prototype.update = function() {
-    var target = renderer.plugins.interaction.mouse.global;
-
-    target.rotation = Geometry.angleBetweenPointsRadians(target, {x:this.head.x, y:this.head.y});
+    var target = this.getPosition();
 
     this.bodyParticlesEmitter.update();
     this.bodySmokeEmitter.update();
@@ -118,7 +140,7 @@ ElementalDragon.prototype.update = function() {
 
 module.exports = ElementalDragon;
 
-
+// ------------------------------------
 var TintDragonBodyBehaviour = {};
 
 TintDragonBodyBehaviour.reset = function(particle) {
@@ -128,7 +150,7 @@ TintDragonBodyBehaviour.reset = function(particle) {
 TintDragonBodyBehaviour.update = function(particle) {
 };
 
-
+// ------------------------------------
 var RotationBehaviour = {};
 
 RotationBehaviour.reset = function(particle) {

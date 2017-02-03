@@ -38,7 +38,7 @@ Rain.prototype.setupBurstEffect = function() {
     var emitterSettings = new EmitterSettings();
     emitterSettings.setQuantity(1000);
     emitterSettings.setBounds({type:"RECTANGLE", width:window.innerWidth, height:1});
-    emitterSettings.setRespawn(true);
+    emitterSettings.setRespawn(false);
     emitterSettings.setSpawnDelay(0, 2000);
 
     this.burstEmitter = new Emitter(this, particleSettings, emitterSettings);

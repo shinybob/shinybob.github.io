@@ -11,8 +11,8 @@ FireworkPositions.launchPosition = function() {
 
 FireworkPositions.burstPosition = function() {
     var position = {};
-    position.x = (window.innerWidth / 2) + QuickRange.range(-300, 300);
-    position.y = QuickRange.range(100, 300);
+    position.x = (window.innerWidth / 2) + QuickRange.range((-window.innerWidth / 3), (window.innerWidth / 3));
+    position.y = QuickRange.range(100, 200);
     return position;
 };
 
