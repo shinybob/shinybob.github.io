@@ -1,10 +1,13 @@
 var FireworkDisplay = require('../src/FireworkDisplay');
 var originalWindowSize, fireworkDisplay, stage;
 
+require("perf.js");
+
 window.onload = init;
 
 function init() {
     originalWindowSize = {width:window.innerWidth, height:window.innerHeight};
+    this.fpsStats = new Perf(Perf.TOP_LEFT);
 
     this.loader = PIXI.loader
         .add('ripple', '../resources/ripple.png')

@@ -14,6 +14,8 @@
     "grunt-cli": "latest",
     "grunt-contrib-clean": "latest",
     "grunt-contrib-copy": "latest",
-    "http-server": "^0.9.0"
+    "http-server": "^0.9.0",
+    "perf-plus.js": "^0.1.6",
+    "perf.js": "^1.2.0"
   }
 }
